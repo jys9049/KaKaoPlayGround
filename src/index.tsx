@@ -5,6 +5,8 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
 import KaKao from './oauth/kakao';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
 declare global {
   interface Window {
@@ -17,12 +19,14 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<App />} />
-        <Route path='/oauth/kakao' element={<KaKao />} />
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<App />} />
+          <Route path='/oauth/kakao' element={<KaKao />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 

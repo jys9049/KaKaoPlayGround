@@ -1,5 +1,10 @@
 /* global kakao */
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
+
+import { useAppDispatch } from '../../app/hooks';
+import { setMap, setPs } from '../../app/feachers/map/map';
 
 const { kakao } = window;
 
@@ -16,10 +21,11 @@ const Map = ({ location }: IMap) => {
   const x = window.innerWidth;
   const y = window.innerHeight;
 
-  const [map, setMap] = useState<any>(null);
   const [keyword, setKeyword] = useState<string>('');
-  const [ps, setPs] = useState<any>();
   const [searchValue, setSearchValue] = useState<any>();
+  const map = useSelector((state: RootState) => state.map.map);
+  const ps = useSelector((state: RootState) => state.map.ps);
+  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -34,8 +40,21 @@ const Map = ({ location }: IMap) => {
   };
 
   const placesSearchCB = (data: any, status: any, pagination: any) => {
-    console.info(data, status, pagination);
     setSearchValue(data);
+
+    const result = data.reduce(
+      (acc: { x: number; y: number }, item: any) => {
+        acc.x += Number(item.x);
+        acc.y += Number(item.y);
+        return acc;
+      },
+      { x: 0, y: 0 }
+    );
+
+    map.setLevel(3);
+    map.panTo(
+      new kakao.maps.LatLng(result.y / data.length, result.x / data.length)
+    );
 
     const bounds = new kakao.maps.LatLngBounds();
 
@@ -98,16 +117,16 @@ const Map = ({ location }: IMap) => {
   useEffect(() => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(33.452613, 126.570888), //지도의 중심좌표.
+      center: new kakao.maps.LatLng(location?.lat, location?.lng), //지도의 중심좌표.
       level: 3, //지도의 레벨(확대, 축소 정도)
     };
     const createMap = new window.kakao.maps.Map(mapRef.current, options); //지도 생성 및 객체 리턴
-    setMap(createMap);
+    dispatch(setMap(createMap));
 
     /** place 관련 객체 리턴 */
     const ps = new kakao.maps.services.Places();
-    setPs(ps);
-  }, []);
+    dispatch(setPs({ ...ps }));
+  }, [location]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
