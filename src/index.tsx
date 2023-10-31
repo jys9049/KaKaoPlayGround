@@ -7,6 +7,7 @@ import App from './App';
 import KaKao from './oauth/kakao';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
+import Map from './pages/map';
 
 declare global {
   interface Window {
@@ -23,6 +24,7 @@ root.render(
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<App />} />
+          <Route path='/map' element={<Map />} />
           <Route path='/oauth/kakao' element={<KaKao />} />
         </Routes>
       </BrowserRouter>

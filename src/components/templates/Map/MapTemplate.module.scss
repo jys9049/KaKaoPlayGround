@@ -1,0 +1,51 @@
+.MapContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.MapSearchBar {
+  position: absolute;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: scroll;
+
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+
+  &::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  }
+}
+
+.MapSearchInput {
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  padding-left: 10px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.MapSearchBtn {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+.MapSearchList {
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 4px;
+  border-bottom: 1px solid grey;
+  cursor: pointer;
+}
